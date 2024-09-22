@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
@@ -33,46 +34,58 @@ fun SensorInformationBox(
 ){
     ConstraintLayout(
         modifier = Modifier
-            .size(width = 165.dp, 100.dp)
+            .fillMaxWidth()
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(15))
             .clip(RoundedCornerShape(percent = 15))
             .background(color = Color.White)
+            .padding(vertical = 8.dp)
+        ,
     ){
-        val(sensorIcon, valueText, unitIcon) = createRefs()
+        val (label, row, div) = createRefs()
         LabelIcon(
             icon = sensorType.icon,
             color = sensorType.color,
-            modifier = Modifier
-            .constrainAs(sensorIcon){
+            value = sensorType.caculateGradient(value.toInt()),
+            modifier = Modifier.constrainAs(label){
                 top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start, margin = 8.dp)
-            },
-            value = sensorType.caculateGradient(value.toInt())
-        )
-        Icon(
-            painter = painterResource(id = sensorType.unit),
-            contentDescription = null,
-            modifier = Modifier
-                .size(24.dp)
-                .constrainAs(unitIcon) {
-                    end.linkTo(parent.end, margin = 16.dp)
-//                top.linkTo(valueText.top)
-                    bottom.linkTo(valueText.bottom, margin = 8.dp)
-                })
-        Text(
-            text = value,
-            style = TextStyle(
-                fontWeight = FontWeight.Light,
-                fontSize = 40.sp,
-            ),
-            modifier = Modifier.constrainAs(valueText){
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                end.linkTo(unitIcon.start, margin = 0.dp)
+                start.linkTo(parent.start, margin = 4.dp)
+                end.linkTo(parent.end, margin = 4.dp)
             }
         )
+        HorizontalDivider(modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .constrainAs(div){
+            top.linkTo(label.bottom)
+            bottom.linkTo(label.bottom)
+        })
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(row) {
+                    top.linkTo(div.bottom, margin = 4.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        ){
+            Text(
+                text = value,
+                style = TextStyle(
+                    fontWeight = FontWeight.ExtraLight,
+                    fontSize = 36.sp,
+                ),
+                modifier = Modifier
+            )
+            Icon(
+                painter = painterResource(id = sensorType.unit),
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+
     }
+
 }
 
 @Composable
@@ -83,7 +96,9 @@ fun LabelIcon(
     value: Int? = null,
     @DrawableRes icon: Int)
 {
-    var mod = modifier.size(64.dp).padding(8.dp)
+    var mod = modifier
+        .size(64.dp)
+        .padding(8.dp)
     if(value != null){
         Log.d("value", value.toString())
         mod = mod.background(
@@ -114,7 +129,9 @@ fun LabelIcon(
 fun PreviewSensorInformationBox(){
 
     Row(
-        modifier = Modifier.padding(25.dp).fillMaxSize(),
+        modifier = Modifier
+            .padding(25.dp)
+            .fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceBetween){
         SensorInformationBox(
             sensorType = SensorType.Temperature,

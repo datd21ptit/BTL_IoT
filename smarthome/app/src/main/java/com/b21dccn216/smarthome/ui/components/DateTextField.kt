@@ -1,6 +1,7 @@
 package com.b21dccn216.smarthome.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,7 +57,9 @@ fun DatePickerDocked(
         }
     }
     Row(
-        modifier = modifier,
+        modifier = modifier.clickable {
+            showDatePicker = !showDatePicker
+        },
         verticalAlignment = Alignment.CenterVertically
     ){
         OutlinedTextField(
@@ -90,7 +93,9 @@ fun DatePickerDocked(
                 }
 
             },
-            modifier = Modifier
+            modifier = Modifier.clickable {
+                showDatePicker = !showDatePicker
+            }
         )
 
         if (showDatePicker) {

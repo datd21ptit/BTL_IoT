@@ -67,9 +67,20 @@ fun ProfileScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(bottom = innerPadding.calculateBottomPadding())
-//            .background(color = Color.Gray.copy(alpha = 0.3f))
+
     ) {
         ImageProfile(modifier = Modifier)
+//        val context = LocalContext.current
+//        IconAndLink(
+//            context = context,
+//            icon = R.drawable.facebook,
+//            link = "https://www.facebook.com/profile.php?id=100023005893756",
+//            title = "Nguyen Tran Dat")
+//        IconAndLink(
+//            context = context,
+//            icon = R.drawable.instagram,
+//            link = "https://www.instagram.com/datanddatt/",
+//            title = "nguyen_tran_dat")
     }
 }
 
@@ -116,31 +127,28 @@ private fun ImageProfile(
                     style = MaterialTheme.typography.titleMedium
                 )
                 val context = LocalContext.current
-                IconAndLink(
-                    context = context,
-                    icon = R.drawable.github,
-                    link = "https://github.com/datd21ptit/iot_smart_home_app",
-                    title = "Android Application Source")
-                IconAndLink(
-                    context = context,
-                    icon = R.drawable.github,
-                    link = "https://github.com/datd21ptit/iot_smarthome_server",
-                    title = "System Server Source")
-                IconAndLink(
-                    context = context,
-                    icon = R.drawable.google_drive,
-                    link = "https://drive.google.com/file/d/14SKu1HwlE7bHLRCTTb9T3hE9ka7pCbh4/view?usp=sharing",
-                    title = "Project report drive")
-                IconAndLink(
-                    context = context,
-                    icon = R.drawable.facebook,
-                    link = "https://www.facebook.com/profile.php?id=100023005893756",
-                    title = "Nguyen Tran Dat")
-                IconAndLink(
-                    context = context,
-                    icon = R.drawable.instagram,
-                    link = "https://www.instagram.com/datanddatt/",
-                    title = "nguyen_tran_dat")
+                Column(Modifier.padding(horizontal = 24.dp)){
+                    IconAndLink(
+                        context = context,
+                        icon = R.drawable.github,
+                        link = "https://github.com/datd21ptit/BTL_IoT/tree/main",
+                        title = "Link Github")
+                    IconAndLink(
+                        context = context,
+                        icon = R.drawable.google_drive,
+                        link = "https://drive.google.com/file/d/14SKu1HwlE7bHLRCTTb9T3hE9ka7pCbh4/view?usp=sharing",
+                        title = "Link Report")
+//                    IconAndLink(
+//                        context = context,
+//                        icon = R.drawable.facebook,
+//                        link = "https://www.facebook.com/profile.php?id=100023005893756",
+//                        title = "Nguyen Tran Dat")
+//                    IconAndLink(
+//                        context = context,
+//                        icon = R.drawable.instagram,
+//                        link = "https://www.instagram.com/datanddatt/",
+//                        title = "nguyen_tran_dat")
+                }
 
                 Spacer(modifier = Modifier.height(8.dp))
             }

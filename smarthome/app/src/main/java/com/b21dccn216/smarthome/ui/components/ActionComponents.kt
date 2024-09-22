@@ -49,16 +49,16 @@ fun ActionBox(
                 .constrainAs(deviceIcon){
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start, margin = 8.dp)
+                    start.linkTo(parent.start, margin = 4.dp)
                 }
         )
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp),
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp),
             horizontalAlignment = Alignment.End,
             modifier = Modifier
             .constrainAs(slideButton){
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
-                end.linkTo(parent.end, margin = 16.dp)
+                end.linkTo(parent.end, margin = 8.dp)
             }){
             Text(text = deviceName,
                 modifier = Modifier)
@@ -73,8 +73,8 @@ fun ActionBox(
 @Composable
 fun SlideButton(
     modifier: Modifier = Modifier,
-    width: Int = 60,
-    height: Int = 30,
+    width: Int = 50,
+    height: Int = 25,
     isOn: Boolean,
 ) {
 //    Box(

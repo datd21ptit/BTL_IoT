@@ -1,5 +1,6 @@
 package com.b21dccn216.smarthome.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,10 +29,11 @@ fun DropDownPicker(
 ){
     var expanded by remember { mutableStateOf(false) }
     Box (
-        modifier = modifier
+        modifier = modifier.clickable { expanded = true }
     ) {
         // Button to open the dropdown
         OutlinedTextField(
+            modifier = Modifier.clickable { expanded = true },
             value = selectedOption,
             onValueChange = {},
             label = { Text("Limit",

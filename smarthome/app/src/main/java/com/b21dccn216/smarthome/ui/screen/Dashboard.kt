@@ -3,7 +3,9 @@ package com.b21dccn216.smarthome.ui.screen
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,9 +29,10 @@ fun DashboardScreen(
     innerPadding: PaddingValues
 ){
     val uiState by viewmodel.uiStateDashboard.collectAsState()
+    val cell = 3
     LazyVerticalGrid(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = innerPadding.calculateBottomPadding()),
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(cell),
         contentPadding = PaddingValues(top = innerPadding.calculateTopPadding(), bottom = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -37,9 +40,9 @@ fun DashboardScreen(
         item { SensorInformationBox( sensorType = SensorType.Temperature, value = uiState.listTemp.last().toString() ) }
         item { SensorInformationBox( sensorType = SensorType.Humidity, value = uiState.listHumid.last().toString() ) }
         item { SensorInformationBox( sensorType = SensorType.Light, value = uiState.listLight.last().toString() ) }
-        Log.d("retrofitD", "CLICK2")
+
         item {
-            ActionBox(icon = R.drawable.lightbulb, deviceName = "Light Bulb",
+            ActionBox(icon = R.drawable.lightbulb, deviceName = "Bulb",
                 isOn = uiState.led == "on",
                 onClick = {
                     if(uiState.led == "on"){
@@ -72,13 +75,14 @@ fun DashboardScreen(
                         viewmodel.clickAction(device = "relay", "on")
                     }
                 }) }
-        item( span = { GridItemSpan(2) }) {
+
+        item( span = { GridItemSpan(cell) }) {
             LineChartComponent(
                 name = "Light",
                 chartData = uiState.listLight,
                 step = 200,
             ) }
-        item( span = { GridItemSpan(2) }) {
+        item( span = { GridItemSpan(cell) }) {
             LineChartComponent(
                 name = "Humidity",
                 chartData = uiState.listHumid,
@@ -86,7 +90,7 @@ fun DashboardScreen(
                 colorChart = Color(0xFF179BAE),
             )
         }
-        item( span = { GridItemSpan(2) }) {
+        item( span = { GridItemSpan(cell) }) {
             LineChartComponent(
                 name = "Temparature",
                 step = 10,
