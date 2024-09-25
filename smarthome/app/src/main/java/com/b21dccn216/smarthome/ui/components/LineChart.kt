@@ -42,7 +42,9 @@ fun LineChart(
     yAxisData: List<Int>,
     height: Dp = 340.dp,
     step: Int = 2,
-    colorChart: Color = Color.Blue
+    colorChart: Color = Color.Blue,
+    tempMin: Int,
+    absMaxYPoint: Int,
 ){
     val xAxisPadding = 16.dp
     val yAxisPadding = 16.dp
@@ -59,9 +61,7 @@ fun LineChart(
         val gridHeight = height.toPx() - yAxisPadding.toPx()*3
         val gridWidth = size.width
 
-        var absMaxYPoint = yAxisData.maxByOrNull { it } ?:0
 
-        val tempMin = yAxisData.minByOrNull { it } ?:0
 
         val minYAxis = tempMin - tempMin%step
         val yAxisLabelList = mutableListOf<String>()
@@ -193,7 +193,9 @@ fun LineChartComponent(
     name: String,
     chartData: List<Int>,
     step: Int = 5,
-    colorChart: Color = Color(0xFFFF8343)
+    colorChart: Color = Color(0xFFFF8343),
+    tempMin: Int,
+    absMaxYPoint: Int
 ){
     Box(
         modifier = Modifier
@@ -216,7 +218,9 @@ fun LineChartComponent(
                 yAxisData = chartData,
                 height = 190.dp,
                 step = step,
-                colorChart = colorChart)
+                colorChart = colorChart,
+                absMaxYPoint = absMaxYPoint,
+                tempMin = tempMin)
         }
 
     }

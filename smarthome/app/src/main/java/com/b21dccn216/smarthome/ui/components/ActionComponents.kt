@@ -37,7 +37,7 @@ fun ActionBox(
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(15))
             .background(color = Color.White)
             .clip(RoundedCornerShape(percent = 15))
-            .size(width = 165.dp, 100.dp)
+            .size(width = 125.dp, 100.dp)
             .clickable{
                 onClick()
             }

@@ -35,6 +35,7 @@ class AppRepository{
         });
     }
     
+
     async getDashboardData(req, res){    // Ham lay du lieu dashboard
         try {
             let limit = req.query.limit;
@@ -43,11 +44,12 @@ class AppRepository{
             let listTemp = await this.getChartData("temp", limit);
             let listHumid = await this.getChartData("humid", limit);
             let listLight = await this.getChartData("light", limit);
-            
+            let listWind = await this.getChartData("wind", limit);
             let result = {
                 led: action['led'],
                 fan: action['fan'],
                 relay: action['relay'],
+                listWind: listWind,
                 listTemp: listTemp,
                 listHumid: listHumid,
                 listLight: listLight
@@ -100,7 +102,7 @@ class AppRepository{
         const limit = parseInt(req.query.limit);
         // console.log(limit);
         const offset = (page - 1) * limit;
-        const { temp, light, humid, time} = req.query;
+        const { temp, light, humid, time, wind , timeSearch} = req.query;/// @Query("timeSearch") timeSearch: String,
         const sort = req.query.sort;
         
         // console.log(sort);
@@ -119,29 +121,39 @@ class AppRepository{
             whereClauses.push('humid = ?');
             queryParams.push(humid);
         }
+        if (wind) {
+            whereClauses.push('wind = ?');
+            queryParams.push(wind);
+        }
         if (time) {
             const [month, day, year] = time.split('/');
             const formattedDate = `${year}-${month}-${day}`;
             whereClauses.push('date(time) = ?');
             queryParams.push(formattedDate);
         }
+        if(timeSearch){
+            // SELECT * FROM smarthome.sensor WHERE (time) like '%19%';
+            whereClauses.push('TIME(time) like ? ')
+            queryParams.push('%' + timeSearch +'%');
+        }
     
-        let sqlQuery = 'SELECT id, temp, light, humid, time FROM sensor';
+        let sqlQuery = 'SELECT id, temp, light, humid,wind, time FROM sensor';
     
         if (whereClauses.length > 0) {
             sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
         }
         let orderByClauses = [];
         // add sort:
-        // console.log(sort)
         if(Array.isArray(sort)){
+            // console.log("sort: " + typeof sort)
+
             sort.forEach( item =>{
-                // console.log(typeof item);
+                // console.log( item);
                 const tmp = JSON.parse(item);
                 // console.log(tmp);
                 const col = tmp['column'];
                 const ord = tmp['order'];
-                if(col && (ord === 'asc' || ord === 'desc')){
+                if(col && (ord === 'ASC' || ord === 'DESC')){
                     orderByClauses.push(` ${col} ${ord}`);
                 }
             })
@@ -195,7 +207,17 @@ class AppRepository{
                     resolve(js);
                 });
             })
-            const data = ret.map( item => [item.id.toString(), item.temp.toString(), item.humid.toString(), item.light.toString(), format(new Date(item.time), 'MM-dd HH:mm:ss')])
+            let count = await this.getCountLess();
+            // console.log("count lesst" + count);
+            total.count = count;
+            const data = []
+            ret.forEach(item =>{
+                var wind = "no sensor"
+                if(item.wind != null){
+                    wind = item.wind.toString()
+                }
+                data.push([item.id.toString(), item.temp.toString(), item.humid.toString(), item.light.toString(), wind , format(new Date(item.time), 'MM-dd HH:mm:ss')])
+            })
             total.data = data;
 
             res.send(JSON.stringify(total));
@@ -207,12 +229,10 @@ class AppRepository{
 
     }
 
-
-
     async getActionTable(req, res){ // Lay du lieu cho trang Table
         const page = parseInt(req.query.page)
         const limit = parseInt(req.query.limit);
-        const {device, state, time} = req.query;
+        const {device, state, time, timeSearch} = req.query;
         const offset = (page - 1) * limit;
         const sort = req.query.sort;
 
@@ -231,6 +251,11 @@ class AppRepository{
             const formattedDate = `${year}-${month}-${day}`;
             whereClauses.push('date(time) = ?');
             queryParams.push(formattedDate);
+        }
+        if(timeSearch){
+            // SELECT * FROM smarthome.sensor WHERE (time) like '%19%';
+            whereClauses.push('TIME(time) LIKE ? ')
+            queryParams.push('%' + timeSearch +'%');
         }
     
         let sqlQuery = 'SELECT * FROM action';
@@ -294,6 +319,9 @@ class AppRepository{
                     resolve(js);
                 });
             })
+            let count = await this.getCountTUrnFanOn();
+            console.log("count fan " + count);
+            total.count = count;
             const data = ret.map( item => [item.id.toString(), item.device, item.state,  format(new Date(item.time), 'MM-dd HH:mm:ss')])
             total.data = data;
 
@@ -304,10 +332,37 @@ class AppRepository{
         }
     }
 
-    async insertSensorData(temperature, humidity, light) { //Hàm Insert giá trị cảm biến
+    async getCountLess(){
+        var sql = "SELECT COUNT(*) as count FROM sensor WHERE date(time) = date(now()) and wind <=30"
+        let count = await new Promise((resolve, reject) => {
+            this.dbConnection.query(sql, function(err, result){
+                if(err){
+                    reject(err);
+                    console.log(err.toString());
+                } 
+                resolve(result[0].count);
+            })
+        })
+        return parseInt(count);
+    }
+    async getCountTUrnFanOn(){
+        var sql = "SELECT COUNT(*) as count FROM action WHERE date(time) = date(now()) and device = 'fan' and state = 'on'"
+        let count = await new Promise((resolve, reject) => {
+            this.dbConnection.query(sql, function(err, result){
+                if(err){
+                    reject(err);
+                    console.log(err.toString());
+                } 
+                resolve(result[0].count);
+            })
+        })
+        return parseInt(count);
+    }
+    async insertSensorData(temperature, humidity, light, wind) { //Hàm Insert giá trị cảm biến
         var dt = dateTime.create();
         var time_formatted = dt.format('Y-m-d H:M:S');
-        var sql = "INSERT INTO sensor (temp, humid, light, time) VALUES ('" + temperature + "', '" + humidity +"', '" + light +"', '"+ time_formatted + "')";
+       
+        var sql = "INSERT INTO sensor (temp, humid, light,wind, time) VALUES ('" + temperature + "', '" + humidity +"', '" + light +"', '" + wind +"', '"+ time_formatted + "')";
         try {
             await new Promise((resolve, reject) => {
                 this.dbConnection.query(sql, function (err, result) {
@@ -336,6 +391,21 @@ class AppRepository{
         }
     }
 
+    async getFanState(){
+        var sql = "SELECT state FROM action WHERE device = 'fan' order by time desc limit 1";
+        try {
+            let ret = await new Promise((resolve, reject) => {
+                this.dbConnection.query(sql, function (err, result) {
+                    if (err) reject(err);
+                    let ret = (result[0].state);
+                    console.log(ret)
+                    resolve(ret);
+                })
+            });
+        } catch (error) {
+            
+        }
+    }
 }
 
 

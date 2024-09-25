@@ -28,10 +28,44 @@ class MqttClient{
         })
 
         this.client.on('message', async function (topic, message, packet ) {
+            try {
+                
+            
             var msg_str = message.toString();
+            var state = await appRepository.getDeviceState();
+            var isOn = state.fan
             if(topic == mqtt_sensor_topic) {
                 var jsonObject = JSON.parse(msg_str);
-                appRepository.insertSensorData(jsonObject["temp"], jsonObject["humid"], jsonObject["light"]);
+                var wind = jsonObject["wind"];
+                var intWind = parseInt(wind)
+                console.log("wind "+ wind + " ison: " +  isOn);
+
+                if(intWind <= 30 && isOn == "off"){
+                    let dat = {
+                        device: "fan",
+                        state: "on",
+                    }
+                    this.publish(mqtt_action_topic, JSON.stringify(dat), (err) => {
+                        if (err) {
+                            console.error(`Failed to publish message to topic ${topic}:`, err);
+                        }
+                    });
+                    await appRepository.insertActionData("fan", "on")
+                }else if(intWind > 30 && isOn == "on"){
+                    let dat = {
+                        device: "fan",
+                        state: "off",
+                    }
+                    this.publish(mqtt_action_topic, JSON.stringify(dat), (err) => {
+                        if (err) {
+                            console.error(`Failed to publish message to topic ${topic}:`, err);
+                        }
+                    });
+                    await appRepository.insertActionData("fan", "off")
+                }
+
+
+                appRepository.insertSensorData(jsonObject["temp"], jsonObject["humid"], jsonObject["light"], jsonObject["wind"]);
             }else if(topic == mqtt_initial_topic){
                 if(msg_str == "esp_setup"){
                     let latest = await appRepository.getDeviceState();
@@ -56,9 +90,16 @@ class MqttClient{
                     }
                 }
             }
+        } catch (error) {
+            console.log(error)
+        }
         });
     }
 
+
+    async checkWind(wind){
+        
+    }
     publish(topic, message){
         this.client.publish(topic, message, (err) => {
             if (err) console.log(err);

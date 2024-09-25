@@ -61,10 +61,12 @@ class SmartHomeViewmodel(
 
     private suspend fun getTableData(){
         try{
-            val result = repository.getSensorDataTable(_uiStateTable.value)
+            val result = repository.getSensorTableData(_uiStateTable.value)
             _uiStateTable.update { value ->
+                val count = result.count
                 value.copy(
-                    tableSensorData = result
+                    tableSensorData = result,
+                    count = count
                 )
             }
             _appState.value = LOADED
@@ -77,9 +79,15 @@ class SmartHomeViewmodel(
     private suspend fun getTableDataAction(){
         try{
             val result = repository.getActionDataTable(_uiStateTable.value)
+            val count = result.count
+            Log.e("viewmodel", count.toString())
+
+//            _uiStateTable.update { it }
             _uiStateTable.update { value ->
                 value.copy(
-                    tableActionData = result
+                    tableActionData = result,
+                    count = count
+
                 )
             }
             _appState.value = LOADED
@@ -91,15 +99,22 @@ class SmartHomeViewmodel(
 
     private suspend fun getDashboardData(){
         try {
-            val listResult = repository.getDashboardUiData(100)
+            val limit = _uiStateDashboard.value.limitD
+            val listResult = repository.getDashboardData(limit.toInt())
             _uiStateDashboard.update {
-                listResult
+                it.copy(data = listResult)
             }
             Log.d("viewmodel", listResult.toString())
 //            getChartData()
             _appState.value = LOADED
         }catch (e: Exception){
             Log.e("viewmodel", e.toString())
+        }
+    }
+
+    fun changeLimit(limt: String){
+        _uiStateDashboard.update { it->
+            it.copy(limitD = limt)
         }
     }
 
@@ -112,9 +127,9 @@ class SmartHomeViewmodel(
                 if(response.isSuccessful && response.code() == 200){
                     _uiStateDashboard.update {
                         when(device){
-                            "led" -> it.copy(led = state).also { Log.e("viewmodel", "led") }
-                            "fan" -> it.copy(fan = state).also { Log.e("viewmodel", "fam") }
-                            "relay" -> it.copy(relay = state).also { Log.e("viewmodel", "relay") }
+                            "led" -> it.copy(data = it.data.copy(led = state))
+                            "fan" -> it.copy(data = it.data.copy(fan = state))
+                            "relay" -> it.copy(data = it.data.copy(relay = state))
                             else -> {it}
                         }
                     }
@@ -131,10 +146,10 @@ class SmartHomeViewmodel(
         _currentScreen.value = screen
         _uiStateTable.update { value ->
             value.copy(
-                sort = listOf(SortOrder.NO_SORT, SortOrder.NO_SORT, SortOrder.NO_SORT),
+                sort = listOf(SortOrder.NO_SORT, SortOrder.NO_SORT, SortOrder.NO_SORT, SortOrder.NO_SORT),
                 sortTime = SortOrder.NO_SORT,
                 page = "1",
-                row = listOf("", "", ""),
+                row = listOf("", "", "", ""),
                 time = "",
             )
         }
@@ -146,15 +161,20 @@ class SmartHomeViewmodel(
                 page = state.page,
                 row = state.row,
                 time = state.time,
-                limit = state.limit
+                limit = state.limit,
+                timeSearch = state.timeSearch
             )
         }
     }
 
     fun ChangeOrder(index: Int){
         if (index == -1){
+            var sortime = SortOrder.DESC
+            if(_uiStateTable.value.sortTime == SortOrder.DESC){
+                sortime = SortOrder.ASC
+            }
             _uiStateTable.update { it ->
-                it.copy(sortTime = toggleSort(it.sortTime))
+                it.copy(sortTime = sortime)
             }
         }else{
             val sort = _uiStateTable.value.sort.toMutableList()

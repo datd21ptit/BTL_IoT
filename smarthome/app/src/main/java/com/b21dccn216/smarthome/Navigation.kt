@@ -140,13 +140,14 @@ fun SmarthomeNavigation(
                     exitTransition = {
                         fadeOut()
                     }) {
-                    val sensorTitleColumn = remember { listOf("Temp", "Humid", "Light") }
+                    val sensorTitleColumn = remember { listOf("Temp", "Humid", "Light", "Wind") }
 //                    val sensorTableData = remember {  }
                     TableScreen(
                         viewmodel = viewmodel,
                         titleColumn = sensorTitleColumn,
                         innerPadding = innerPadding,
-                        tableData = uiStateTable.tableSensorData
+                        tableData = uiStateTable.tableSensorData,
+                        countTurnOn = uiStateTable.count,
                     )
                 }
                 composable(ACTION_DATA_TABLE.second,
@@ -168,7 +169,8 @@ fun SmarthomeNavigation(
                         viewmodel = viewmodel,
                         titleColumn = actionTitleColumn,
                         innerPadding = innerPadding,
-                        tableData = uiStateTable.tableActionData
+                        tableData = uiStateTable.tableActionData,
+                        countTurnOn = uiStateTable.count
                     )
                 }
                 composable(PROFILE.second,

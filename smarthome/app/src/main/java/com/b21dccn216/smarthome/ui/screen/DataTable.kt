@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.b21dccn216.smarthome.R
 import com.b21dccn216.smarthome.SmartHomeViewmodel
 import com.b21dccn216.smarthome.model.SortOrder
-import com.b21dccn216.smarthome.model.TableResponse
+import com.b21dccn216.smarthome.network.dto.TableDTO
 import com.b21dccn216.smarthome.ui.components.DateAndLimit
 import com.b21dccn216.smarthome.ui.components.PageButtons
 import com.b21dccn216.smarthome.ui.components.SearchBox
@@ -34,7 +34,8 @@ fun TableScreen(
     viewmodel: SmartHomeViewmodel,
     titleColumn: List<String>,
     innerPadding: PaddingValues,
-    tableData: TableResponse
+    tableData: TableDTO,
+    countTurnOn: Int?,
 ) {
     val uiState by viewmodel.uiStateTable.collectAsState()
     Column(
@@ -42,7 +43,8 @@ fun TableScreen(
             .padding(top = innerPadding.calculateTopPadding(),
                 bottom = innerPadding.calculateBottomPadding(),
                 start = 8.dp, end = 8.dp
-            )
+            ),
+//        horizontalAlignment = Alignment.CenterHorizontally
     ){
         val selectedDate by remember{ mutableStateOf(uiState.time) }
 //      Search box
@@ -69,8 +71,25 @@ fun TableScreen(
                 onDateSelected = {it ->
                     viewmodel.addFilter(uiState.copy(time = it))
                 },
-                onDeSelected = { viewmodel.addFilter(uiState.copy(time = ""))})
+                onDeSelected = { viewmodel.addFilter(uiState.copy(time = ""))},
+                time = uiState.timeSearch,
+                onChangeTime = {viewmodel.addFilter(uiState.copy(timeSearch = it))}
+            )
         }
+        if(countTurnOn != null){
+            Spacer(modifier = Modifier.height(8.dp))
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .shadow(elevation = 2.dp, shape = RoundedCornerShape(15))
+                .padding(2.dp)
+                .background(color = Color.White, shape = RoundedCornerShape(15))
+                .padding(12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text(text = "Number of turning fan on: ${countTurnOn}")
+            }
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
         val scrollState = rememberScrollState()
 //        Table

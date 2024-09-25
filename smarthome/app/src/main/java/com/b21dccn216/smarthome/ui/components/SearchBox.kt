@@ -2,6 +2,7 @@ package com.b21dccn216.smarthome.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,13 +36,14 @@ fun SearchBox(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
-        titleColumn.forEachIndexed{ index, tit ->
+        titleColumn.filterIndexed{index,_ -> index < 2 }.forEachIndexed{ index, tit ->
             OutlinedTextField(
                 label = {
                     Text(tit,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
-                        overflow = TextOverflow.Visible
+                        overflow = TextOverflow.Visible,
+                        modifier = Modifier.padding(0.dp)
                     ) },
                 value = uiState.row[index],
                 onValueChange = { it ->
@@ -53,14 +55,57 @@ fun SearchBox(
                     imeAction = ImeAction.Done
                 ),
                 trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            onClickClose(index)
-                            onValueChange("", index)
-                        }
-                    )
+                    if(uiState.row[index] != ""){
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            modifier = Modifier.clickable {
+                                onClickClose(index)
+                                onValueChange("", index)
+                            }
+                        )
+                    }
+                },
+                shape = RoundedCornerShape(15),
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        titleColumn.filterIndexed{index,_ -> index >=2 }.forEachIndexed{ ind, tit ->
+            val index = ind + 2
+            OutlinedTextField(
+                label = {
+                    Text(tit,
+                        style = MaterialTheme.typography.labelSmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Visible,
+                        modifier = Modifier.padding(0.dp)
+                    ) },
+                value = uiState.row[index],
+                onValueChange = { it ->
+                    onValueChange(it, index)
+                },
+                singleLine = true,
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                trailingIcon = {
+                    if(uiState.row[index] != ""){
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            modifier = Modifier.clickable {
+                                onClickClose(index)
+                                onValueChange("", index)
+                            }
+                        )
+                    }
                 },
                 shape = RoundedCornerShape(15),
                 modifier = Modifier.weight(1f)
@@ -77,8 +122,9 @@ fun DateAndLimit(
     selectedOption: String,
     onOptionSelected: (String)->Unit,
     onDateSelected: (String) -> Unit,
-    onDeSelected : () ->Unit
-
+    onDeSelected : () ->Unit,
+    time: String,
+    onChangeTime: (String) -> Unit
 ){
     Row(
         modifier = Modifier
@@ -88,6 +134,11 @@ fun DateAndLimit(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.Bottom
     ){
+        SearchBoxTime(
+            modifier = Modifier.weight(1f),
+            time = time,
+            onValueChange = {onChangeTime(it)},
+        )
         DatePickerDocked(
             onDeselected = {onDeSelected()},
             onDateSelected = onDateSelected,
@@ -103,5 +154,51 @@ fun DateAndLimit(
            },
             modifier = Modifier.weight(1f)
         )
+
+    }
+}
+
+
+
+@Composable
+fun SearchBoxTime(
+    modifier: Modifier,
+    time: String,
+    onValueChange: (String) -> Unit,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ){
+            OutlinedTextField(
+                label = {
+                    Text( text ="Time",
+                        style = MaterialTheme.typography.bodySmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Visible
+                    ) },
+                value = time,
+                onValueChange = { it ->
+                    onValueChange(it)
+                },
+                singleLine = true,
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                trailingIcon = {
+                    if(time != ""){
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = null,
+                            modifier = Modifier.clickable {
+                                onValueChange("")
+                            }
+                        )
+                    }
+                },
+                shape = RoundedCornerShape(15),
+                modifier = Modifier.weight(1f)
+            )
     }
 }

@@ -16,13 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.b21dccn216.smarthome.model.TableResponse
+import com.b21dccn216.smarthome.network.dto.TableDTO
 
 
 @Composable
 fun PageButtons(
     modifier: Modifier,
-    tableData: TableResponse,
+    tableData: TableDTO,
     onPageSelected: (Int) -> Unit, //viewmodel.addFilter(uiState.copy(page = index.toString()))
 ){
     LazyRow(
