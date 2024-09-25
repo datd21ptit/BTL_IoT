@@ -78,7 +78,7 @@ class SmartHomeViewmodel(
 
     private suspend fun getTableDataAction(){
         try{
-            val result = repository.getActionDataTable(_uiStateTable.value)
+            val result = repository.getActionTableData(_uiStateTable.value)
             val count = result.count
             Log.e("viewmodel", count.toString())
 

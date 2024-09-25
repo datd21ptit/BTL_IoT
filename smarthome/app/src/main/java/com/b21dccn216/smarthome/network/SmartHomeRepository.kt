@@ -1,6 +1,5 @@
 package com.b21dccn216.smarthome.network
 
-import com.b21dccn216.smarthome.model.DashboarUiState
 import com.b21dccn216.smarthome.model.SortOrder
 import com.b21dccn216.smarthome.network.dto.TableDTO
 import com.b21dccn216.smarthome.model.TableUiState
@@ -16,21 +15,19 @@ class SmartHomeRepository(
         return apiService.sendAction(device, state)
     }
 
-    suspend fun getSensorTableData(
-        uiState: TableUiState
-    ): TableDTO {
-        val ls = uiState.sort
-        val listSort = mutableListOf("{\"column\": \"time\", \"order\": \"${uiState.sortTime.value}\"}")
-        ls.forEachIndexed{index, it ->
-            if(it != SortOrder.NO_SORT){
-                var col = ""
-                when(index){
-                    0 -> col = "temp"
-                    1 -> col = "humid"
-                    2 -> col = "light"
-                    3 -> col = "wind"
+    suspend fun getSensorTableData(uiState: TableUiState): TableDTO
+    {
+        val sortOrderList = mutableListOf("{\"column\": \"time\", \"order\": \"${uiState.sortTime.value}\"}")
+        uiState.sort.forEachIndexed{ index, sortOrder ->
+            if(sortOrder != SortOrder.NO_SORT){
+                val col = when(index){
+                    0 ->  "temp"
+                    1 ->  "humid"
+                    2 ->  "light"
+                    3 ->  "wind"
+                    else -> ""
                 }
-                if(col != "") listSort.add("{\"column\": \"${col}\", \"order\": \"${it.value}\"}")
+                if(col.isNotEmpty()) sortOrderList.add("{\"column\": \"${col}\", \"order\": \"${sortOrder.value}\"}")
             }
         }
         return apiService.getSensorTable(
@@ -39,27 +36,29 @@ class SmartHomeRepository(
             temp = uiState.row[0],
             humid = uiState.row[1],
             light = uiState.row[2],
-            time = uiState.time,
-            sort = listSort,
             wind = uiState.row[3],
+            time = uiState.time,
+            sort = sortOrderList,
             timeSearch = uiState.timeSearch
         )
     }
 
-    suspend fun getActionDataTable(
-        uiState: TableUiState
-    ): TableDTO {
+    suspend fun getActionTableData(uiState: TableUiState): TableDTO
+    {
+        val sortOrderList = mutableListOf<String>().apply {
+            if(uiState.sortTime != SortOrder.NO_SORT){
+                add("{\"column\": \"time\", \"order\": \"${uiState.sortTime.value}\"}")
+            }
+        }
 
-        val listSort = if(uiState.sortTime == SortOrder.NO_SORT)mutableListOf<String>() else mutableListOf("{\"column\": \"time\", \"order\": \"${uiState.sortTime.value}\"}")
-        val ls = uiState.sort
-        ls.forEachIndexed{index, it ->
-            if(it != SortOrder.NO_SORT){
-                var col = ""
-                when(index){
-                    0 -> col = "device"
-                    1 -> col = "state"
+        uiState.sort.forEachIndexed{index, sortOrder ->
+            if(sortOrder != SortOrder.NO_SORT){
+                val col = when(index){
+                    0 ->  "device"
+                    1 ->  "state"
+                    else -> ""
                 }
-                if(col != "") listSort.add("{\"column\": \"${col}\", \"order\": \"${it.value}\"}")
+                if(col.isNotEmpty()) sortOrderList.add("{\"column\": \"${col}\", \"order\": \"${sortOrder.value}\"}")
             }
         }
         return apiService.getActionTable(
@@ -68,7 +67,7 @@ class SmartHomeRepository(
             device = uiState.row[0],
             state = uiState.row[1],
             time = uiState.time,
-            sort = listSort,
+            sort = sortOrderList,
             timeSearch = uiState.timeSearch
         )
     }
