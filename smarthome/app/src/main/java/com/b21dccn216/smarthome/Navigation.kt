@@ -100,31 +100,25 @@ fun SmarthomeNavigation(
                 startDestination = DASHBOARD.second
             ) {
                 composable(DASHBOARD.second,
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { -1000 }) + fadeIn()
-                    },
-                    exitTransition = {
-                         fadeOut()
-                    },
-                ) {
-                    DashboardScreen(
-                        viewmodel = viewmodel,
-                        innerPadding = innerPadding)
+                    enterTransition = { slideInHorizontally(initialOffsetX = { -1000 }) + fadeIn() },
+                    exitTransition = { fadeOut() },
+                ){
+                    DashboardScreen(viewmodel = viewmodel, innerPadding = innerPadding)
                 }
+
                 composable(SENSOR_DATA_TABLE.second,
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = {
-                            val previous = navController.previousBackStackEntry?.destination?.route
-                            when(previous){
-                                DASHBOARD.second -> 1000
-                                else -> -1000
-                            }}) + fadeIn()
-                    },
-                    exitTransition = {
-                        fadeOut()
-                    }) {
+                    enterTransition = { slideInHorizontally(
+                        initialOffsetX = {
+                            getTransitionOffset(
+                                navController.previousBackStackEntry?.destination?.route,
+                                DASHBOARD.second,
+                                1000
+                            )
+                        }
+                    ) + fadeIn() },
+                    exitTransition = { fadeOut() }
+                ){
                     val sensorTitleColumn = remember { listOf("Temp", "Humid", "Light", "Wind") }
-//                    val sensorTableData = remember {  }
                     TableScreen(
                         viewmodel = viewmodel,
                         titleColumn = sensorTitleColumn,
@@ -133,21 +127,20 @@ fun SmarthomeNavigation(
                         countTurnOn = uiStateTable.count,
                     )
                 }
+
                 composable(ACTION_DATA_TABLE.second,
                     enterTransition = {
                         slideInHorizontally(initialOffsetX = {
-                            when(navController.previousBackStackEntry?.destination?.route){
-                                PROFILE.second -> -1000
-                                else -> 1000
-                            }
+                            getTransitionOffset(
+                                navController.previousBackStackEntry?.destination?.route,
+                                PROFILE.second,
+                                -1000
+                            )
                         }) + fadeIn()
                     },
-                    exitTransition = {
-                        fadeOut()
-                    }) {
+                    exitTransition = { fadeOut() }
+                ){
                     val actionTitleColumn = remember { listOf("Device", "State") }
-//                    val actionTableData = remember { a.tableActionData }
-
                     TableScreen(
                         viewmodel = viewmodel,
                         titleColumn = actionTitleColumn,
@@ -156,13 +149,11 @@ fun SmarthomeNavigation(
                         countTurnOn = uiStateTable.count
                     )
                 }
+
                 composable(PROFILE.second,
-                    enterTransition = {
-                        slideInHorizontally(initialOffsetX = { 1000 }) + fadeIn()
-                    },
-                    exitTransition = {
-                         fadeOut()
-                    }) {
+                    enterTransition = { slideInHorizontally(initialOffsetX = { 1000 }) + fadeIn() },
+                    exitTransition = { fadeOut() }
+                ) {
                     ProfileScreen(modifier = Modifier, innerPadding = innerPadding)
                 }
             }
@@ -179,4 +170,8 @@ private fun getScreenTitle(currentScreen: Pair<Int, String>): String {
         PROFILE.second -> "Profile"
         else -> "Unknown"
     }
+}
+
+private fun getTransitionOffset(previousRoute: String?, currentRoute: String, offset: Int): Int {
+    return if (previousRoute == currentRoute) offset else -offset
 }
