@@ -1,4 +1,4 @@
-package com.b21dccn216.smarthome.model
+package com.b21dccn216.smarthome.model.uistate
 
 import com.b21dccn216.smarthome.network.dto.DashboardDTO
 

@@ -1,6 +1,5 @@
 package com.b21dccn216.smarthome.network
 
-import com.b21dccn216.smarthome.model.DashboarUiState
 import com.b21dccn216.smarthome.network.dto.DashboardDTO
 import com.b21dccn216.smarthome.network.dto.TableDTO
 import okhttp3.OkHttpClient

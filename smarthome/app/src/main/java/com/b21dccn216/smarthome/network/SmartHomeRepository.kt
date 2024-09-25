@@ -2,7 +2,7 @@ package com.b21dccn216.smarthome.network
 
 import com.b21dccn216.smarthome.model.SortOrder
 import com.b21dccn216.smarthome.network.dto.TableDTO
-import com.b21dccn216.smarthome.model.TableUiState
+import com.b21dccn216.smarthome.model.uistate.TableUiState
 import com.b21dccn216.smarthome.network.dto.DashboardDTO
 import retrofit2.Response
 

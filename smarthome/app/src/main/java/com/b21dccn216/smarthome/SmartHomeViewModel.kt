@@ -7,12 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.b21dccn216.smarthome.model.Destinations.DASHBOARD
 import com.b21dccn216.smarthome.model.Destinations.SENSOR_DATA_TABLE
 import com.b21dccn216.smarthome.network.SmartHomeRepository
-import com.b21dccn216.smarthome.model.AppState.LOADED
-import com.b21dccn216.smarthome.model.AppState.LOADING
-import com.b21dccn216.smarthome.model.DashboarUiState
+import com.b21dccn216.smarthome.model.uistate.AppState.LOADED
+import com.b21dccn216.smarthome.model.uistate.AppState.LOADING
+import com.b21dccn216.smarthome.model.uistate.DashboarUiState
 import com.b21dccn216.smarthome.model.Destinations.ACTION_DATA_TABLE
 import com.b21dccn216.smarthome.model.SortOrder
-import com.b21dccn216.smarthome.model.TableUiState
+import com.b21dccn216.smarthome.model.uistate.TableUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

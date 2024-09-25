@@ -22,30 +22,22 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.b21dccn216.smarthome.model.BottomNavigationItem
 import com.b21dccn216.smarthome.model.Destinations.ACTION_DATA_TABLE
 import com.b21dccn216.smarthome.model.Destinations.DASHBOARD
 import com.b21dccn216.smarthome.model.Destinations.PROFILE
 import com.b21dccn216.smarthome.model.Destinations.SENSOR_DATA_TABLE
-import com.b21dccn216.smarthome.model.AppState.LOADING
+import com.b21dccn216.smarthome.model.uistate.AppState.LOADING
 import com.b21dccn216.smarthome.ui.components.BottomNavigationApp
 import com.b21dccn216.smarthome.ui.screen.DashboardScreen
 import com.b21dccn216.smarthome.ui.screen.LoadingScreen
 import com.b21dccn216.smarthome.ui.screen.ProfileScreen
 import com.b21dccn216.smarthome.ui.screen.TableScreen
-
-data class BottomNavigationItem(
-    val title: Pair<Int, String>,
-    val selectedIon: ImageVector,
-    val unselectedIcon: ImageVector,
-    val hasNews: Boolean,
-    val badgeCount: Int? = null
-)
 
 val items = listOf(
     BottomNavigationItem(
@@ -86,17 +78,8 @@ fun SmarthomeNavigation(
 
     Scaffold(
         topBar = {
-            when (currentScreen) {
-                DASHBOARD -> {
-                    TopAppBar(title = { Text(text = "Dashboard") })
-                }
-                SENSOR_DATA_TABLE -> {
-                    TopAppBar(title = { Text(text = "Sensor table") })
-                }
-                ACTION_DATA_TABLE -> {
-                    TopAppBar(title = { Text(text = "Control table") })
-                }
-                else -> null
+            if(currentScreen != PROFILE){
+                TopAppBar(title = { Text(text = getScreenTitle(currentScreen)) })
             }
         },
         bottomBar = {
@@ -185,5 +168,15 @@ fun SmarthomeNavigation(
             }
         }
 
+    }
+}
+
+private fun getScreenTitle(currentScreen: Pair<Int, String>): String {
+    return when (currentScreen.second) {
+        DASHBOARD.second -> "Dashboard"
+        SENSOR_DATA_TABLE.second -> "Sensor Table"
+        ACTION_DATA_TABLE.second -> "Control Table"
+        PROFILE.second -> "Profile"
+        else -> "Unknown"
     }
 }

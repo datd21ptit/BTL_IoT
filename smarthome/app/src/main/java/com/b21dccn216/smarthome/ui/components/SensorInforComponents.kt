@@ -45,7 +45,7 @@ fun SensorInformationBox(
         LabelIcon(
             icon = sensorType.icon,
             color = sensorType.color,
-            value = sensorType.caculateGradient(value.toInt()),
+            value = sensorType.calculateGradient(value.toInt()),
             modifier = Modifier.constrainAs(label){
                 top.linkTo(parent.top)
                 start.linkTo(parent.start, margin = 4.dp)

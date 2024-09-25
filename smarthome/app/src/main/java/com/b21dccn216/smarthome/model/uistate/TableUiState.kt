@@ -1,5 +1,6 @@
-package com.b21dccn216.smarthome.model
+package com.b21dccn216.smarthome.model.uistate
 
+import com.b21dccn216.smarthome.model.SortOrder
 import com.b21dccn216.smarthome.network.dto.TableDTO
 
 
@@ -8,7 +9,12 @@ data class TableUiState(
     val limit: String = "20",
     val time: String = "",
     val page: String = "1",
-    val sort: List<SortOrder> = listOf(SortOrder.NO_SORT, SortOrder.NO_SORT, SortOrder.NO_SORT, SortOrder.NO_SORT), //
+    val sort: List<SortOrder> = listOf(
+        SortOrder.NO_SORT,
+        SortOrder.NO_SORT,
+        SortOrder.NO_SORT,
+        SortOrder.NO_SORT
+    ), //
     val sortTime: SortOrder = SortOrder.DESC,
     val row: List<String> = listOf("", "", "", ""),
     val count: Int? = null,
