@@ -141,13 +141,7 @@ class SmartHomeViewmodel(
 
     fun addFilter(state: TableUiState){
         _uiStateTable.update { value ->
-            value.copy(
-                page = state.page,
-                row = state.row,
-                dateTime = state.dateTime,
-                limit = state.limit,
-                searchTime = state.searchTime
-            )
+            state
         }
     }
 
