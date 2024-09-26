@@ -1,11 +1,10 @@
 package com.b21dccn216.smarthome.ui.components
 
-import android.service.autofill.OnClickAction
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
-import com.b21dccn216.smarthome.items
+import com.b21dccn216.smarthome.ui.screen.items
 
 @Composable
 fun BottomNavigationApp(

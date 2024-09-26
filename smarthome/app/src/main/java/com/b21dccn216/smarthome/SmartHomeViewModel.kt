@@ -58,18 +58,28 @@ class SmartHomeViewmodel(
             }
         }
     }
+    private suspend fun getDashboardData(){
+        try {
+            val listResult = repository.getDashboardData(_uiStateDashboard.value.limitD.toInt())
+            _uiStateDashboard.update {
+                it.copy(data = listResult)
+            }
+            setAppStateLoaded()
+            Log.d("viewmodel", listResult.toString())
+        }catch (e: Exception){
+            Log.e("viewmodel", e.toString())
+        }
+    }
 
     private suspend fun getTableData(){
         try{
             val result = repository.getSensorTableData(_uiStateTable.value)
             _uiStateTable.update { value ->
-                val count = result.count
                 value.copy(
                     tableSensorData = result,
-                    count = count
                 )
             }
-            _appState.value = LOADED
+            setAppStateLoaded()
             Log.d("viewmodel", "get sensor table")
         }catch (e: Exception){
             Log.e("viewmodel", e.toString())
@@ -79,46 +89,23 @@ class SmartHomeViewmodel(
     private suspend fun getTableDataAction(){
         try{
             val result = repository.getActionTableData(_uiStateTable.value)
-            val count = result.count
-            Log.e("viewmodel", count.toString())
-
-//            _uiStateTable.update { it }
             _uiStateTable.update { value ->
                 value.copy(
                     tableActionData = result,
-                    count = count
-
                 )
             }
-            _appState.value = LOADED
+            setAppStateLoaded()
             Log.d("viewmodel", "get action table")
         }catch (e: Exception){
             Log.e("viewmodel", e.toString())
         }
     }
 
-    private suspend fun getDashboardData(){
-        try {
-            val limit = _uiStateDashboard.value.limitD
-            val listResult = repository.getDashboardData(limit.toInt())
-            _uiStateDashboard.update {
-                it.copy(data = listResult)
-            }
-            Log.d("viewmodel", listResult.toString())
-//            getChartData()
-            _appState.value = LOADED
-        }catch (e: Exception){
-            Log.e("viewmodel", e.toString())
-        }
-    }
-
-    fun changeLimit(limt: String){
+    fun changeLimit(limit: String){
         _uiStateDashboard.update { it->
-            it.copy(limitD = limt)
+            it.copy(limitD = limit)
         }
     }
-
-
 
     fun clickAction(device: String, state: String){
         viewModelScope.launch {
@@ -145,12 +132,9 @@ class SmartHomeViewmodel(
     fun navigateTo(screen: Pair<Int, String>){
         _currentScreen.value = screen
         _uiStateTable.update { value ->
-            value.copy(
-                sort = listOf(SortOrder.NO_SORT, SortOrder.NO_SORT, SortOrder.NO_SORT, SortOrder.NO_SORT),
-                sortTime = SortOrder.NO_SORT,
-                page = "1",
-                row = listOf("", "", "", ""),
-                time = "",
+            TableUiState().copy(
+                tableSensorData = value.tableSensorData,
+                tableActionData = value.tableActionData,
             )
         }
     }
@@ -160,37 +144,36 @@ class SmartHomeViewmodel(
             value.copy(
                 page = state.page,
                 row = state.row,
-                time = state.time,
+                dateTime = state.dateTime,
                 limit = state.limit,
-                timeSearch = state.timeSearch
+                searchTime = state.searchTime
             )
         }
     }
 
-    fun ChangeOrder(index: Int){
-        if (index == -1){
-            var sortime = SortOrder.DESC
-            if(_uiStateTable.value.sortTime == SortOrder.DESC){
-                sortime = SortOrder.ASC
-            }
-            _uiStateTable.update { it ->
-                it.copy(sortTime = sortime)
-            }
-        }else{
-            val sort = _uiStateTable.value.sort.toMutableList()
-            sort[index] = toggleSort(sort[index])
-            _uiStateTable.update { it ->
-                it.copy(sort = sort)
+    fun changeOrder(index: Int){
+        _uiStateTable.update { currentState ->
+            if (index == -1) {
+                val newSortOrder = if(currentState.sortTime == SortOrder.DESC) SortOrder.ASC else SortOrder.DESC
+                currentState.copy(sortTime = newSortOrder)
+            } else {
+                val newSort = currentState.sort.toMutableList()
+                newSort[index] = toggleSort(newSort[index])
+                currentState.copy(sort = newSort)
             }
         }
     }
 
-    fun toggleSort(currentSortOrder: SortOrder): SortOrder {
+    private fun toggleSort(currentSortOrder: SortOrder): SortOrder {
         return when (currentSortOrder) {
             SortOrder.NO_SORT -> SortOrder.ASC
             SortOrder.ASC -> SortOrder.DESC
             SortOrder.DESC -> SortOrder.NO_SORT
         }
+    }
+
+    private fun setAppStateLoaded() {
+        _appState.value = LOADED
     }
 
 

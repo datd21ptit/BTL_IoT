@@ -10,7 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-private const val IpAddress = "192.168.1.6"
+private const val IpAddress = "192.168.1.5"
 private const val BASE_URL =
     "http://${IpAddress}:3001"
 

@@ -35,7 +35,7 @@ fun TableScreen(
     titleColumn: List<String>,
     innerPadding: PaddingValues,
     tableData: TableDTO,
-    countTurnOn: Int?,
+    countTitle: String,
 ) {
     val uiState by viewmodel.uiStateTable.collectAsState()
     Column(
@@ -46,7 +46,7 @@ fun TableScreen(
             ),
 //        horizontalAlignment = Alignment.CenterHorizontally
     ){
-        val selectedDate by remember{ mutableStateOf(uiState.time) }
+        val selectedDate by remember{ mutableStateOf(uiState.dateTime) }
 //      Search box
         Column(modifier = Modifier
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(15))
@@ -69,14 +69,14 @@ fun TableScreen(
                     viewmodel.addFilter(uiState.copy(limit = it))
                 },
                 onDateSelected = {it ->
-                    viewmodel.addFilter(uiState.copy(time = it))
+                    viewmodel.addFilter(uiState.copy(dateTime = it))
                 },
-                onDeSelected = { viewmodel.addFilter(uiState.copy(time = ""))},
-                time = uiState.timeSearch,
-                onChangeTime = {viewmodel.addFilter(uiState.copy(timeSearch = it))}
+                onDeSelected = { viewmodel.addFilter(uiState.copy(dateTime = ""))},
+                time = uiState.searchTime,
+                onChangeTime = {viewmodel.addFilter(uiState.copy(searchTime = it))}
             )
         }
-        if(countTurnOn != null){
+        if(tableData.count != null){
             Spacer(modifier = Modifier.height(8.dp))
             Column(modifier = Modifier
                 .fillMaxWidth()
@@ -86,7 +86,7 @@ fun TableScreen(
                 .padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                Text(text = "Number of turning fan on: ${countTurnOn}")
+                Text(text = "${countTitle}: ${tableData.count}")
             }
         }
 
@@ -105,7 +105,7 @@ fun TableScreen(
                 TitleRow(titleColumn,
                     onClickCell = { index ->
                         Log.e("viewmodel", "CLICKED")
-                        viewmodel.ChangeOrder(index)
+                        viewmodel.changeOrder(index)
                     },
                     listSort = uiState.sort,
                     sortTime = uiState.sortTime)

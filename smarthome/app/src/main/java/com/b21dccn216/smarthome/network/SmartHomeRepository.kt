@@ -37,9 +37,9 @@ class SmartHomeRepository(
             humid = uiState.row[1],
             light = uiState.row[2],
             wind = uiState.row[3],
-            time = uiState.time,
+            time = uiState.dateTime,
             sort = sortOrderList,
-            timeSearch = uiState.timeSearch
+            timeSearch = uiState.searchTime
         )
     }
 
@@ -66,9 +66,9 @@ class SmartHomeRepository(
             limit = uiState.limit,
             device = uiState.row[0],
             state = uiState.row[1],
-            time = uiState.time,
+            time = uiState.dateTime,
             sort = sortOrderList,
-            timeSearch = uiState.timeSearch
+            timeSearch = uiState.searchTime
         )
     }
 }

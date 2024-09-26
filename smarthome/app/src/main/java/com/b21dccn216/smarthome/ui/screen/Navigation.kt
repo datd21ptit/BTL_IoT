@@ -1,4 +1,4 @@
-package com.b21dccn216.smarthome
+package com.b21dccn216.smarthome.ui.screen
 
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -27,6 +27,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.b21dccn216.smarthome.AppViewModelProvider
+import com.b21dccn216.smarthome.SmartHomeViewmodel
 import com.b21dccn216.smarthome.model.BottomNavigationItem
 import com.b21dccn216.smarthome.model.Destinations.ACTION_DATA_TABLE
 import com.b21dccn216.smarthome.model.Destinations.DASHBOARD
@@ -34,10 +36,6 @@ import com.b21dccn216.smarthome.model.Destinations.PROFILE
 import com.b21dccn216.smarthome.model.Destinations.SENSOR_DATA_TABLE
 import com.b21dccn216.smarthome.model.uistate.AppState.LOADING
 import com.b21dccn216.smarthome.ui.components.BottomNavigationApp
-import com.b21dccn216.smarthome.ui.screen.DashboardScreen
-import com.b21dccn216.smarthome.ui.screen.LoadingScreen
-import com.b21dccn216.smarthome.ui.screen.ProfileScreen
-import com.b21dccn216.smarthome.ui.screen.TableScreen
 
 val items = listOf(
     BottomNavigationItem(
@@ -68,7 +66,7 @@ val items = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SmarthomeNavigation(
+fun SmartHomeNavigation(
     viewmodel: SmartHomeViewmodel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavHostController = rememberNavController()
 ) {
@@ -124,7 +122,7 @@ fun SmarthomeNavigation(
                         titleColumn = sensorTitleColumn,
                         innerPadding = innerPadding,
                         tableData = uiStateTable.tableSensorData,
-                        countTurnOn = uiStateTable.count,
+                        countTitle = "Count times wind <= 30",
                     )
                 }
 
@@ -146,7 +144,7 @@ fun SmarthomeNavigation(
                         titleColumn = actionTitleColumn,
                         innerPadding = innerPadding,
                         tableData = uiStateTable.tableActionData,
-                        countTurnOn = uiStateTable.count
+                        countTitle = "Number turning fan on"
                     )
                 }
 
