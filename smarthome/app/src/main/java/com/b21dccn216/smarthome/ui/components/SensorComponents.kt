@@ -28,7 +28,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.b21dccn216.smarthome.model.SensorType
 
 @Composable
-fun SensorInformationBox(
+fun SensorBox(
     sensorType: SensorType,
     value: String
 ){
@@ -133,11 +133,11 @@ fun PreviewSensorInformationBox(){
             .padding(25.dp)
             .fillMaxSize(),
         horizontalArrangement = Arrangement.SpaceBetween){
-        SensorInformationBox(
+        SensorBox(
             sensorType = SensorType.Temperature,
             value = "50")
 
-        SensorInformationBox(
+        SensorBox(
             sensorType = SensorType.Light,
             value = "1500")
     }

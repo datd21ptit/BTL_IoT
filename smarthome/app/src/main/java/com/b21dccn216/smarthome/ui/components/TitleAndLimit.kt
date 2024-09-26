@@ -2,6 +2,7 @@ package com.b21dccn216.smarthome.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,7 +20,8 @@ fun TitleAndLimit(
         verticalAlignment = Alignment.CenterVertically
     ){
         Text("Chart",
-            modifier = Modifier.weight(1f))
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.titleMedium)
 
         DropDownPicker(
             onOptionSelected = {onOptionSelected(it)},

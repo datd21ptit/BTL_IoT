@@ -61,17 +61,15 @@ fun LineChart(
         val gridHeight = height.toPx() - yAxisPadding.toPx()*3
         val gridWidth = size.width
 
-
-
         val minYAxis = tempMin - tempMin%step
         val yAxisLabelList = mutableListOf<String>()
-
 
         var tmp = minYAxis
         while(tmp <= absMaxYPoint){
             yAxisLabelList.add(tmp.toString())
             tmp += step
         }
+
         yAxisLabelList.add(tmp.toString())
 
         val xAxisSpacing = (gridWidth - xAxisPadding.toPx()) / (yAxisData.size - 1)

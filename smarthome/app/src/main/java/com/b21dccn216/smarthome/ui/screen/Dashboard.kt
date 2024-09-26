@@ -1,6 +1,5 @@
 package com.b21dccn216.smarthome.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -9,19 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.Divider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +23,7 @@ import com.b21dccn216.smarthome.R
 import com.b21dccn216.smarthome.model.SensorType
 import com.b21dccn216.smarthome.ui.components.ActionBox
 import com.b21dccn216.smarthome.ui.components.LineChartComponent
-import com.b21dccn216.smarthome.ui.components.SensorInformationBox
+import com.b21dccn216.smarthome.ui.components.SensorBox
 import com.b21dccn216.smarthome.ui.components.TitleAndLimit
 
 
@@ -51,25 +43,25 @@ fun DashboardScreen(
     ) {
 
             item {
-                SensorInformationBox(
+                SensorBox(
                     sensorType = SensorType.Temperature,
                     value = uiState.data.listTemp.last().toString()
                 )
             }
             item {
-                SensorInformationBox(
+                SensorBox(
                     sensorType = SensorType.Humidity,
                     value = uiState.data.listHumid.last().toString()
                 )
             }
             item {
-                SensorInformationBox(
+                SensorBox(
                     sensorType = SensorType.Light,
                     value = uiState.data.listLight.last().toString()
                 )
             }
             item {
-                SensorInformationBox(
+                SensorBox(
                     sensorType = SensorType.Wind,
                     value = uiState.data.listWind.last().toString()
                 )

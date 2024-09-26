@@ -31,7 +31,6 @@ fun ActionBox(
     onClick: ()->Unit,
     isOn: Boolean,
 ){
-
     ConstraintLayout(
         modifier = Modifier
             .shadow(elevation = 2.dp, shape = RoundedCornerShape(15))
@@ -42,7 +41,7 @@ fun ActionBox(
                 onClick()
             }
     ){
-        val(deviceIcon, deviceText, slideButton) = createRefs()
+        val(deviceIcon, slideButton) = createRefs()
         LabelIcon(icon = icon,
             isOn = isOn,
             modifier = Modifier
@@ -65,8 +64,6 @@ fun ActionBox(
 
             SlideButton(isOn = isOn, modifier = Modifier)
         }
-
-
     }
 }
 
@@ -110,7 +107,6 @@ fun SlideButton(
 @Preview( showBackground = true)
 @Composable
 fun PreviewActionBox(){
-
     Row(modifier = Modifier
         .padding(20.dp)
         .fillMaxSize(), horizontalArrangement = Arrangement.SpaceBetween){
@@ -118,7 +114,6 @@ fun PreviewActionBox(){
 //        ActionBox()
         SlideButton(isOn = isOn)
         ActionBox(deviceName = "Light Bulb", icon = R.drawable.lightbulb, onClick = {}, isOn = false)
-
     }
 
 }

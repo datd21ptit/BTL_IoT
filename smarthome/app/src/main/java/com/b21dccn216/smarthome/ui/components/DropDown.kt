@@ -36,7 +36,7 @@ fun DropDownPicker(
             modifier = Modifier.clickable { expanded = true },
             value = selectedOption,
             onValueChange = {},
-            label = { Text("Limit",
+            label = { Text("Page size",
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Visible
