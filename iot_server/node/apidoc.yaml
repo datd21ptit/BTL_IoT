@@ -8,11 +8,11 @@ info:
     3. **Device Controlling Data Table**: This screen shows the history of the device states (on or off).
     This API allows users to interact with the smart home system. Users can retrieve data for each screen.
   contact:
-    email: apiteam@swagger.io
+    email: datforitwork@gmail.com
   version: "1.0.0"
 externalDocs:
   description: Project github link
-  url: https://github.com/datd21ptit/iot_smart_home_app.git
+  url: https://github.com/datd21ptit/BTL_IoT/tree/main
 servers:
   - url: http://localhost:3001
 tags:
@@ -129,7 +129,7 @@ paths:
             example: 12
         - name: temp
           in: query
-          description: Temperature filter
+          description: Temperature search
           required: false
           schema:
             type: integer
@@ -137,25 +137,32 @@ paths:
             example:
         - name: humid
           in: query
-          description: Humidity filter
+          description: Humidity search
           required: false
           schema:
             type: integer
             default: null
         - name: light
           in: query
-          description: Brightness filter
+          description: Brightness search
           required: false
           schema:
             type: integer
             default: null
         - name: time
           in: query
-          description: Date filter
+          description: Date search
           required: false
           schema:
             type: string
             example: "08/25/2024"
+        - name: wind
+          in: query
+          description: Wind search
+          required: false
+          schema:
+            type: integer
+            default: null
         - name: sort
           in: query
           description: Sort table by columns and order
@@ -165,7 +172,13 @@ paths:
             items:
               type: string
               example: { "column": "time", "order": "desc"}
-            
+        - name: timeSearch
+          in: query
+          description: Time search
+          required: false
+          schema:
+            type: string
+            default: null    
 
       responses:
         '200':
@@ -255,6 +268,13 @@ paths:
             items:
               type: string
               example: { "column": "time", "order": "desc"}
+        - name: timeSearch
+          in: query
+          description: Time search
+          required: false
+          schema:
+            type: string
+            default: null  
       responses:
         '200':
           description: successful operation, return 12 row of table

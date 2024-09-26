@@ -8,29 +8,30 @@ const YAML = require('yaml');
 const fs = require('fs');
 const file = fs.readFileSync('./apidoc.yaml', 'utf-8');
 const swaggerDocument = YAML.parse(file);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Repository va MQTT Client
 const appRepository = new AppRepository();
 const client = new MqttClient(appRepository);
+let listDevice = ["led", "fan", "relay"]
+
 
 // Method
-app.get('/dashboard', (req, res) => appRepository.getDashboardData(req, res));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-let listDevice = ["led", "fan", "relay"]
+app.get('/dashboard', (req, res) => appRepository.getDashboardData(req, res));
 
 app.post('/dashboard', (req, res) => {
     let device = req.query.device
     let state = req.query.state
     // console.log(device);
     // console.log(state);
-    
     if(listDevice.includes(device) && ["on", "off"].includes(state)){
       client.publishAction(device, state, res);
     }else{
       res.status(415).send()
     }
-  });
+  }
+);
 
 app.get('/table/sensor', (req, res) => appRepository.getSensorTable(req, res));
 

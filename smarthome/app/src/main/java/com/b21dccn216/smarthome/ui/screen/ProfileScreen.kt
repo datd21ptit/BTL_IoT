@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.b21dccn216.smarthome.ui.screen
 
 
@@ -46,17 +48,6 @@ fun ProfileScreen(
 
     ) {
         ImageProfile(modifier = Modifier)
-//        val context = LocalContext.current
-//        IconAndLink(
-//            context = context,
-//            icon = R.drawable.facebook,
-//            link = "https://www.facebook.com/profile.php?id=100023005893756",
-//            title = "Nguyen Tran Dat")
-//        IconAndLink(
-//            context = context,
-//            icon = R.drawable.instagram,
-//            link = "https://www.instagram.com/datanddatt/",
-//            title = "nguyen_tran_dat")
     }
 }
 
@@ -112,23 +103,23 @@ private fun ImageProfile(
                     IconAndLink(
                         context = context,
                         icon = R.drawable.google_drive,
-                        link = "https://drive.google.com/file/d/14SKu1HwlE7bHLRCTTb9T3hE9ka7pCbh4/view?usp=sharing",
+                        link = "https://drive.google.com/file/d/12KMPp_kpq-B-ucTZyJeG4DIXJjwE4utO/view?usp=sharing",
                         title = "Link Report")
-//                    IconAndLink(
-//                        context = context,
-//                        icon = R.drawable.facebook,
-//                        link = "https://www.facebook.com/profile.php?id=100023005893756",
-//                        title = "Nguyen Tran Dat")
-//                    IconAndLink(
-//                        context = context,
-//                        icon = R.drawable.instagram,
-//                        link = "https://www.instagram.com/datanddatt/",
-//                        title = "nguyen_tran_dat")
+                    IconAndLink(
+                        context = context,
+                        icon = R.drawable.facebook,
+                        link = "https://www.facebook.com/profile.php?id=100023005893756",
+                        title = "Nguyen Tran Dat")
+                    IconAndLink(
+                        context = context,
+                        icon = R.drawable.instagram,
+                        link = "https://www.instagram.com/datanddatt/",
+                        title = "nguyen_tran_dat")
                 }
-
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
+
         CreateImageProfile(
             modifier = Modifier.constrainAs(profileImg){
                 bottom.linkTo(backImg.bottom)

@@ -110,7 +110,7 @@ fun PreviewActionBox(){
     Row(modifier = Modifier
         .padding(20.dp)
         .fillMaxSize(), horizontalArrangement = Arrangement.SpaceBetween){
-        var isOn by remember { mutableStateOf(false) }
+        val isOn by remember { mutableStateOf(false) }
 //        ActionBox()
         SlideButton(isOn = isOn)
         ActionBox(deviceName = "Light Bulb", icon = R.drawable.lightbulb, onClick = {}, isOn = false)

@@ -35,7 +35,6 @@ class AppRepository{
         });
     }
     
-
     async getDashboardData(req, res){    // Ham lay du lieu dashboard
         try {
             let limit = req.query.limit;
@@ -100,31 +99,18 @@ class AppRepository{
     async getSensorTable(req, res){ // Lay du lieu cho trang Table
         const page = parseInt(req.query.page)
         const limit = parseInt(req.query.limit);
-        // console.log(limit);
         const offset = (page - 1) * limit;
         const { temp, light, humid, time, wind , timeSearch} = req.query;/// @Query("timeSearch") timeSearch: String,
         const sort = req.query.sort;
         
-        // console.log(sort);
-        // console.log(typeof sort);
         let whereClauses = [];
         let queryParams = [];
-        if(temp){
-            whereClauses.push('temp = ?');
-            queryParams.push(temp);
-        }
-        if (light) {
-            whereClauses.push('light = ?');
-            queryParams.push(light);
-        }
-        if (humid) {
-            whereClauses.push('humid = ?');
-            queryParams.push(humid);
-        }
-        if (wind) {
-            whereClauses.push('wind = ?');
-            queryParams.push(wind);
-        }
+
+        // Where clauses
+        if (temp) whereClauses.push('temp = ?'), queryParams.push(temp);
+        if (light) whereClauses.push('light = ?'), queryParams.push(light);
+        if (humid) whereClauses.push('humid = ?'), queryParams.push(humid);
+        if (wind) whereClauses.push('wind = ?'), queryParams.push(wind);
         if (time) {
             const [month, day, year] = time.split('/');
             const formattedDate = `${year}-${month}-${day}`;
@@ -132,33 +118,26 @@ class AppRepository{
             queryParams.push(formattedDate);
         }
         if(timeSearch){
-            // SELECT * FROM smarthome.sensor WHERE (time) like '%19%';
-            whereClauses.push('TIME(time) like ? ')
+            whereClauses.push('TIME(time) like ? ');
             queryParams.push('%' + timeSearch +'%');
         }
     
-        let sqlQuery = 'SELECT id, temp, light, humid,wind, time FROM sensor';
+        let sqlQuery = 'SELECT id, temp, light, humid, wind, time FROM sensor';
     
         if (whereClauses.length > 0) {
             sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
         }
-        let orderByClauses = [];
-        // add sort:
-        if(Array.isArray(sort)){
-            // console.log("sort: " + typeof sort)
 
+        let orderByClauses = [];
+
+        if(Array.isArray(sort)){
             sort.forEach( item =>{
-                // console.log( item);
                 const tmp = JSON.parse(item);
-                // console.log(tmp);
                 const col = tmp['column'];
                 const ord = tmp['order'];
-                if(col && (ord === 'ASC' || ord === 'DESC')){
-                    orderByClauses.push(` ${col} ${ord}`);
-                }
+                if(col && (ord === 'ASC' || ord === 'DESC')) orderByClauses.push(` ${col} ${ord}`);
             })
         }else if(sort !== undefined && sort !== ""){
-            // console.log("defiened ");
             const tmp = JSON.parse(sort);
             const col = tmp['column'];
             const ord = tmp['order'];
@@ -225,8 +204,6 @@ class AppRepository{
             console.log("Error in getSensorTable" + error);
             res.status(404).send();
         }
-
-
     }
 
     async getActionTable(req, res){ // Lay du lieu cho trang Table
@@ -345,6 +322,7 @@ class AppRepository{
         })
         return parseInt(count);
     }
+
     async getCountTUrnFanOn(){
         var sql = "SELECT COUNT(*) as count FROM action WHERE date(time) = date(now()) and device = 'fan' and state = 'on'"
         let count = await new Promise((resolve, reject) => {
@@ -358,6 +336,7 @@ class AppRepository{
         })
         return parseInt(count);
     }
+
     async insertSensorData(temperature, humidity, light, wind) { //Hàm Insert giá trị cảm biến
         var dt = dateTime.create();
         var time_formatted = dt.format('Y-m-d H:M:S');

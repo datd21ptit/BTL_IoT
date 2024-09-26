@@ -42,74 +42,72 @@ fun DashboardScreen(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
-            item {
-                SensorBox(
-                    sensorType = SensorType.Temperature,
-                    value = uiState.data.listTemp.last().toString()
-                )
-            }
-            item {
-                SensorBox(
-                    sensorType = SensorType.Humidity,
-                    value = uiState.data.listHumid.last().toString()
-                )
-            }
-            item {
-                SensorBox(
-                    sensorType = SensorType.Light,
-                    value = uiState.data.listLight.last().toString()
-                )
-            }
-            item {
-                SensorBox(
-                    sensorType = SensorType.Wind,
-                    value = uiState.data.listWind.last().toString()
-                )
-
-            }
+        item {
+            SensorBox(
+                sensorType = SensorType.Temperature,
+                value = uiState.data.listTemp.last().toString()
+            )
+        }
+        item {
+            SensorBox(
+                sensorType = SensorType.Humidity,
+                value = uiState.data.listHumid.last().toString()
+            )
+        }
+        item {
+            SensorBox(
+                sensorType = SensorType.Light,
+                value = uiState.data.listLight.last().toString()
+            )
+        }
+        item {
+            SensorBox(
+                sensorType = SensorType.Wind,
+                value = uiState.data.listWind.last().toString()
+            )
+        }
 
         item(span  = { GridItemSpan(cell) }) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(2.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                    ActionBox(icon = R.drawable.lightbulb, deviceName = "Bulb",
-                        isOn = uiState.data.led == "on",
-                        onClick = {
-                            if(uiState.data.led == "on"){
-                                viewmodel.clickAction(device = "led", "off")
-                            }else{
-                                viewmodel.clickAction(device = "led", "on")
-                            }
+                ActionBox(icon = R.drawable.lightbulb, deviceName = "Bulb",
+                    isOn = uiState.data.led == "on",
+                    onClick = {
+                        if(uiState.data.led == "on"){
+                            viewmodel.clickAction(device = "led", "off")
+                        }else{
+                            viewmodel.clickAction(device = "led", "on")
                         }
-                    )
+                    }
+                )
 
-                    ActionBox(icon = R.drawable.fan, deviceName = "Fan",
-                        isOn = uiState.data.fan == "on",
-                        onClick = {
-                            if(uiState.data.fan == "on"){
-                                viewmodel.clickAction(device = "fan", "off")
-                            }else{
-                                viewmodel.clickAction(device = "fan", "on")
-                            }
+                ActionBox(icon = R.drawable.fan, deviceName = "Fan",
+                    isOn = uiState.data.fan == "on",
+                    onClick = {
+                        if(uiState.data.fan == "on"){
+                            viewmodel.clickAction(device = "fan", "off")
+                        }else{
+                            viewmodel.clickAction(device = "fan", "on")
                         }
-                    )
+                    }
+                )
 
-                    ActionBox(icon = R.drawable.fan, deviceName = "Relay",
-                        isOn = uiState.data.relay == "on",
-                        onClick = {
-                            if(uiState.data.relay == "on"){
-                                viewmodel.clickAction(device = "relay", "off")
-                            }else{
-                                viewmodel.clickAction(device = "relay", "on")
-                            }
-                        })
+                ActionBox(icon = R.drawable.fan, deviceName = "Relay",
+                    isOn = uiState.data.relay == "on",
+                    onClick = {
+                        if(uiState.data.relay == "on"){
+                            viewmodel.clickAction(device = "relay", "off")
+                        }else{
+                            viewmodel.clickAction(device = "relay", "on")
+                        }
+                    }
+                )
             }
         }
 
-
         item( span = { GridItemSpan(cell) }) {
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -153,7 +151,7 @@ fun DashboardScreen(
                     tempMin = 0
                 )
             }
-         }
+        }
     }
 }
 
