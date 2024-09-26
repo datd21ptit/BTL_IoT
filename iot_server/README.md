@@ -1,12 +1,5 @@
 # Smart Home Server
-This is repository has 3 part:
-
-1. [mysql](https://github.com/datd21ptit/iot_smarthome_server/tree/master/mysql) contains 2 ".db" file which is structure of 2 table used for this server
-2. [smartHomeEsp826](https://github.com/datd21ptit/iot_smarthome_server/tree/master/smartHomeEsp8266) contains implementation of ESP8266
-3. [node](https://github.com/datd21ptit/iot_smarthome_server/tree/master/node) is implementation of server.
-
-The server source in this repository can be used with this [SmartHome Android Application](https://github.com/datd21ptit/iot_smart_home_app.git) 
-# Description
+Link git: https://github.com/datd21ptit/BTL_IoT/tree/main
 - This server is a part of smart home system project for "IoT and application" subject
 - This server plays a role as a bridge for communication between ESP8266 and application. It collects sensor output, write it to database, send it to application. It also listen user's controlling to controll device.
 

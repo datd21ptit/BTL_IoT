@@ -1,4 +1,7 @@
 # Smart Home System
+
+Link git: https://github.com/datd21ptit/BTL_IoT/tree/main
+
 Smart home system is IoT and Application Subject Project which has DHT11 and light sensor to monitor temperature, humidity and brightness of house. System contains three part:
 - - Hardware: Esp8266 to read sensor data, publish it and listen to controlling signal.
 - - Backend: NodeJs is chosen because of easy and modulization of implementation. Backend's role is to listen sensor data from hardward and write it to MySql database, response to HTTP request of Frontend
@@ -24,7 +27,7 @@ password_file passFile
 allow_anonymous true
 ```
 5. Run ```mosquitto -v -c broker.conf``` to run mosquitto with configuration in broker.conf
-## Clons project
+## Clone project
 ```git clone https://github.com/datd21ptit/BTL_IoT```
 ## Install Database
 1. Open MySql Workbench
@@ -72,7 +75,7 @@ const options = {
 - Android studio
 - Implementation of [Backend](./iot_server).
 ### Install
-1. Open project in Android studio
+1. Open folder [smarthome](./smarthome/) in Android studio
 2. Install Virtual Device or connect physical one
 3. Run application
 

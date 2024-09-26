@@ -1,4 +1,5 @@
 # Smart Home App
+Link git: https://github.com/datd21ptit/BTL_IoT/tree/main
 Smart Home App is application for monitoring sensor, controlling device of a smart home system.
 
 This application runs simultaneously with  [SmartHome Android System Server](https://github.com/datd21ptit/iot_smarthome_server) 
