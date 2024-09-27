@@ -1,4 +1,4 @@
-# Smart Home System
+# Smart Home System2
 
 Link git: https://github.com/datd21ptit/BTL_IoT/tree/main
 
